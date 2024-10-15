@@ -75,12 +75,12 @@ jobs:
       - name: Create env file
         run: |
           touch .env.local
-          echo NEXT_PUBLIC_POKEMON_URL_BASE="https://pokeapi.co/api/v2/" >> .env.local
-          echo DUMB_JSON_URL_BASE="https://dummyjson.com/" >> .env.local
-          echo REDIS_URL="redis://default:wV7wePGZgoAw512xtQFtrfUMhFWR1FQI@redis-18650.c10.us-east-1-4.ec2.redns.redis-cloud.com:18650" >> .env.local
-          echo MONGO_URL="mongodb+srv://nelcidodiaz13:rHpd2WCEfaRi1XFs@cluster0.lewzq.mongodb.net/" >> .env.local
-          echo MONGO_USER="nelcidodiaz13" >> .env.local
-          echo MONGO_PASSWORD="rHpd2WCEfaRi1XFs" >> .env.local
+          echo NEXT_PUBLIC_POKEMON_URL_BASE=${{ secrets.NEXT_PUBLIC_POKEMON_URL_BASE }}  >> .env.local
+          echo DUMB_JSON_URL_BASE=${{ secrets.DUMB_JSON_URL_BASE }} >> .env.local
+          echo REDIS_URL=${{ secrets.REDIS_URL }} >> .env.local
+          echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env.local
+          echo MONGO_USER=${{ secrets.MONGO_USER }} >> .env.local
+          echo MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} >> .env.local
           echo MONGO_DB="pokemon-next" >> .env.local
           echo MONGO_CLUSTER="cluster0" >> .env.local
           echo REDIS_LIMIT=300 >> .env.local
