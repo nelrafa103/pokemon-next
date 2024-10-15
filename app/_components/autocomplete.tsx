@@ -1,7 +1,6 @@
 "use client"
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import * as React from 'react'
-import { recomendations } from "../_aux/search_engine";
 import { usePathname, useRouter } from "next/navigation";
 
 function AutoCompleteComponent() {

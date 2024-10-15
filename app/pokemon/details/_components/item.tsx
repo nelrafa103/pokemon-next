@@ -1,18 +1,16 @@
 
 import * as React from 'react'
 
-import Image from 'next/image';
 import {
 	Card,
 	CardContent,
-	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "../../../components/ui/card";
+} from "@/components/ui/card";
 import { Root } from '@/app/_interfaces/ability';
+import { toUpperCase } from '@/app/_aux/utils';
 
-function ItemComponent(props: { abilty: Root }) {
+export default function ItemComponent(props: { abilty: Root }) {
 	const generation = toUpperCase(props.abilty.generation.name)
 	const name = toUpperCase(props.abilty.name)
 	return (<>
@@ -38,9 +36,4 @@ function ItemComponent(props: { abilty: Root }) {
 		</Card>
 	</>)
 }
-export default ItemComponent
 
-
-function toUpperCase(name: string) {
-	return name.charAt(0).toUpperCase() + name.slice(1)
-}

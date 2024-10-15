@@ -3,3 +3,8 @@ export interface PokemonSearch {
 	name: string,
 	url: string,
 }
+
+export interface SignInAuth {
+	password: string,
+	email: string
+}

@@ -3,9 +3,7 @@
 import { Mongo } from "../_services/mongo"
 import { Redis } from "../_services/redis"
 import * as Pokemon from '../_interfaces/pokemon'
-import { json } from "stream/consumers"
 import { PokemonSearch } from "../_interfaces/custom"
-import { parse } from "path"
 interface SearchParam {
 	param: string
 }

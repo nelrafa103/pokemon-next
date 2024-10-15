@@ -1,7 +1,7 @@
 
 "use client"
-import { NavigationMenuLink } from "../../../components/ui/navigation-menu"
-import { Button } from "../../../components/ui/button";
+import { NavigationMenuLink } from "@/components/ui/navigation-menu"
+import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function ButtonComponent(props: { value: string }) {

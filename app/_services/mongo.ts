@@ -10,7 +10,7 @@ export class Mongo {
 	private static async connect(db: string) {
 		
 		try {
-		//	this.client.
+			
 			return Mongo.client.db(db)
 		}
 		

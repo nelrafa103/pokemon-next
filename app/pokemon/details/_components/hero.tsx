@@ -1,12 +1,9 @@
 "use client"
-import { useThemeStore } from "@/app/_zustand/theme";
+import { toUpperCase } from "@/app/_aux/utils";
 import { Image } from "@nextui-org/react";
 
-function HeroComponent(props: { alt: string, src: string, name: string }) {
-	let capitalize_name = ""
-	props.name.length > 0 ? capitalize_name = props.name[0].toUpperCase() + props.name.slice(1) : console.log("ok")
-
-	const theme = useThemeStore((state: any) => state.theme);
+export default function HeroComponent(props: { alt: string, src: string, name: string }) {
+	const capitalize_name = props.name.length > 0 ?  toUpperCase(props.name) : ""
 
 	return (<div className="flex items-center flex-col place-items-center content-center w-full justify-items-center justify-center">
 		<Image
@@ -48,4 +45,3 @@ function HeroComponent(props: { alt: string, src: string, name: string }) {
 		
 }
 
-export default HeroComponent;

@@ -43,7 +43,6 @@ export default function Search() {
   }
 
   React.useEffect(() => {
-    console.log(pokemons)
   }, [pokemons])
 
   return (

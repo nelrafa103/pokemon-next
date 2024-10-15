@@ -3,8 +3,6 @@ import * as React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
@@ -12,11 +10,11 @@ import Image from "next/image";
 import { Root } from "../_interfaces/pokemon";
 import { useRouter } from "next/navigation";
 
-function ListItemComponent(props: { pokemon: Root }) {
+function ItemComponent(props: { pokemon: Root }) {
   const router = useRouter();
 
   function handleClick(param: number) {
-    router.push(`/details/${param}`);
+    router.push(`/pokemon/details/${param}`);
   }
 
   const capitalized_name =
@@ -47,4 +45,4 @@ function ListItemComponent(props: { pokemon: Root }) {
     </Card>
   );
 }
-export default ListItemComponent;
+export default ItemComponent;

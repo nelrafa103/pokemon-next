@@ -1,19 +1,17 @@
 import * as Pokemon from "../_interfaces/pokemon";
 import * as Ability from "../_interfaces/ability";
 import * as CustomPokemon from "../_interfaces/custom"
-import { resolve } from "dns";
 async function requestPokemonList(limit: number, offset: number) {
-	let pokemon_list: Pokemon.Root[] = [];
 
 
 	const request = await fetch(
 		process.env.NEXT_PUBLIC_POKEMON_URL_BASE + `pokemon?limit=${limit}&offset=${offset}`,
 	);
 	const response = await request.json();
-	for (const pokemon of response.results) {
-		const result = await requestPokemonData(pokemon.url)
-		pokemon_list.push(result)
-	}
+
+	const promises = response.results.map((pokemon: { url: string }) => requestPokemonData(pokemon.url));
+	const pokemon_list: Pokemon.Root[] = await Promise.all(promises);
+
 	return pokemon_list;
 }
 
@@ -31,13 +29,12 @@ export async function getPokemonList(props: { limit: number, offset: number, tri
 	} catch (error) {
 		if (props.tries > 0) {
 			const time = base_delay * Math.pow(2, props.tries)
-			await new Promise((resolve) => setTimeout(() => {}, time))
+			await new Promise((resolve) => setTimeout(resolve, time))
 			return await getPokemonList({ limit: props.limit, offset: props.offset, tries: props.tries - 1 })
 		} else {
 			throw error;
 		}
 	} 
-	return []
 }
 
 
@@ -57,13 +54,12 @@ export async function getPokemonDetails(props: { id: number, tries: number }): P
 	} catch (error) {
 		if (props.tries > 0) {
 			const time = base_delay * Math.pow(2, props.tries)
-			await new Promise((resolve) => setTimeout(() => {}, time))
-			return await getPokemonDetails({ id: props.id, tries: props.tries - 1})
+			await new Promise((resolve) => setTimeout(resolve, time))
+			return await getPokemonDetails({ id: props.id, tries: props.tries - 1 })
 		} else {
 			throw error;
 		}
 	} 
-	return {} as Pokemon.Root
 }
 
 /*
@@ -81,14 +77,11 @@ async function requestPokemonAbility(url: string): Promise<Ability.Root> {
 
 
 async function requestPokemonAbities(abilities: Pokemon.Ability[]) {
-	let abilities_list: Ability.Root[] = []
-	abilities.forEach(async (item, index) => {
-		const result = await requestPokemonAbility(item.ability.url)
-		abilities_list.push(result)
-	 
-	})
-	return abilities_list;
+	const promises = abilities.map((item => requestPokemonData(item.ability.url)));
+	const details: Ability.Root[] = await Promise.all(promises)
+	return details;
 }
+
 
 export async function getPokemonAbilities(props: { list: Pokemon.Ability[], tries: number }): Promise<Ability.Root[]> {
 	const base_delay = 1000
@@ -97,14 +90,14 @@ export async function getPokemonAbilities(props: { list: Pokemon.Ability[], trie
 	} catch (error) {
 		if (props.tries > 0) {
 			const time = base_delay * Math.pow(2, props.tries)
-			await new Promise((resolve) => setTimeout(() => {}, time ))
-			return await getPokemonAbilities({ list: props.list, tries: props.tries - 1})
+			await new Promise((resolve) => setTimeout(resolve, time))
+			return await getPokemonAbilities({ list: props.list, tries: props.tries - 1 })
 		     
 		} else {
 			throw error;
 		}
-	} 
-	return {} as Ability.Root[]
+	}
+	
 }
 
 
@@ -124,18 +117,26 @@ export async function RequestAllPokemons(): Promise<Pokemon.Root[]> {
 
 
 export async function requestSearched(pokemons: CustomPokemon.PokemonSearch[]) {
-	let list: Pokemon.Root[] = []
 
-    
-	for (const pokemon of pokemons) {
-		const result = await requestPokemonData(pokemon.url)
-		list.push(result)
-	}
- 	 
-	fetch("/pokemon", {
-		method: "PUT",
-		body: JSON.stringify(list)
-	})
-	return list
+	const promises = pokemons.map(item => requestPokemonData(item.url))
+
+	const results: Pokemon.Root[] = await Promise.all(promises)
+ 
+	requestCache(results)
+	return results
 } 
 
+
+function requestCache(pokemons: Pokemon.Root[]) {
+ 
+	 
+	fetch("/pokemon", {
+		method: "PUT",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(pokemons)
+	})
+
+	
+}

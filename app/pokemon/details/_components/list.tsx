@@ -2,14 +2,13 @@
 import * as React from 'react'
 import * as Ability from '@/app/_interfaces/ability'
 import * as Pokemon from '@/app/_interfaces/pokemon'
-import { getPokemonAbilities } from '../../_aux/pokemon_api'
-import ItemComponent from './card'
+import { getPokemonAbilities } from '@/app/_aux/pokemon_api'
+import ItemComponent from './item'
 export default function ListComponent(props: { abilities: Pokemon.Ability[] }) {
 
-	const empty_object: Ability.Root[] = []
-	const [abilities, setAbilities] = React.useState(empty_object);
+	const [abilities, setAbilities] = React.useState<Ability.Root[]>([]);
 	React.useEffect(() => {
-		if (abilities.length == 0) getPokemonAbilities({ list: props.abilities, tries: 3 }).then((value) => setAbilities(value)).catch(() => console.log("Oh no"))
+		if (abilities.length == 0) getPokemonAbilities({ list: props.abilities, tries: 3 }).then((value) => setAbilities(value)).catch(() => {})
 	}, [abilities])
 	 
 	return (

@@ -1,16 +1,12 @@
 "use client";
 import * as React from "react";
-import { Root } from "../_interfaces/pokemon";
-import { Suspense } from "react";
-import ListItemComponent from "./list_item";
+import * as Pokemon from "../_interfaces/pokemon";
+import ListItemComponent from "./item";
 
-import { Progress } from "@/components/ui/progress";
 import { getPokemonList } from "../_aux/pokemon_api";
 import { setTimeout } from "timers";
-function ListComponent() {
-  const list: Root[] = [];
+export default function ListComponent() {
   const documentRef = React.useRef(document);
-  const [progress, setProgress] = React.useState(0);
   const [counter, setCounter] = React.useState(0);
   const limit = 10;
   const offset = React.useRef(0);
@@ -25,10 +21,9 @@ function ListComponent() {
     }
   }
   documentRef.current.addEventListener("scroll", handleScroll);
-  const [pokemons, setPokemons] = React.useState(list);
+  const [pokemons, setPokemons] = React.useState<Pokemon.Root[]>([]);
 
   React.useEffect(() => {
-    console.log(counter);
     getPokemonList({ limit: limit, offset: offset.current, tries: 6 }).then(
       (res) => setPokemons(pokemons.concat(res)),
     );
@@ -43,16 +38,11 @@ function ListComponent() {
   }, [offset.current, counter]);
 
   return (
-    <Suspense fallback={<Progress value={progress} className="w-[60%]" />}>
-      <div className="grid lg:grid-cols-5 md:grid-cols-3 items-center justify-items-center">
-        {pokemons.length > 1 ? (
-          pokemons.map((item, index) => <ListItemComponent pokemon={item} key={index} />)
-        ) : (
-          <Progress value={progress} className="w-[60%]" />
-        )}
-      </div>
-    </Suspense>
+    <div className="grid lg:grid-cols-5 md:grid-cols-3 items-center justify-items-center">
+      {
+        pokemons.map((item, index) => <ListItemComponent pokemon={item} key={index} />)
+      }
+    </div>
   );
 }
 
-export default ListComponent;

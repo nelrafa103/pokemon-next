@@ -8,22 +8,11 @@ import {
   Link,
   Image,
 } from "@nextui-org/react";
-import { count } from "console";
 import { toUpperCase } from "@/app/_aux/utils";
-export function ListItemComponent(props: { pokemon: Root }) {
-  return <BaseComponent item={props.pokemon} />
-  
-}
 
-export function ListItemPlaceholder(props: { placeholders: any[], count: number }) {
-  let component_list: any = [];
-  for (let i: number = 0; i < props.count; i++) {
-    component_list.push(<BaseComponent item={props.placeholders[i]} key={`BaseComponet${i}`} />) 
-  }
-  return component_list;
-  
+export function ItemComponent(props: { pokemon: Root }) {
+  return <BaseComponent item={props.pokemon} />  
 }
-
 
 
 
