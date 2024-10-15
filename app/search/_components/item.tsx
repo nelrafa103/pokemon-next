@@ -1,4 +1,4 @@
-import { Root } from "@/app/_interfaces/pokemon";
+import * as Pokemon from "@/app/_interfaces/pokemon";
 import {
   Card,
   CardHeader,
@@ -9,10 +9,14 @@ import {
   Image,
 } from "@nextui-org/react";
 import { toUpperCase } from "@/app/_aux/utils";
-
-export function ItemComponent(props: { pokemon: Root }) {
-  return <BaseComponent item={props.pokemon} />  
+import { memo } from "react";
+interface ItemProps {
+  pokemon: Pokemon.Root
 }
+
+const ItemComponent = memo((props: ItemProps): React.ReactElement<ItemProps> => {
+  return <BaseComponent item={props.pokemon} />  
+})
 
 
 
@@ -23,7 +27,7 @@ function BaseComponent(props: { item: any }) {
         alt="nextui logo"
         height={40}
         radius="sm"
-        src={props.item.id != undefined ? props.item.sprites.other["official-artwork"].front_default: "" }
+        src={props.item.id != undefined ? props.item.sprites.other["official-artwork"].front_default : ""}
         width={40}
       />
       <div className="flex flex-col">
@@ -47,3 +51,5 @@ function BaseComponent(props: { item: any }) {
     </CardFooter>
   </Card>)
 }
+
+export default ItemComponent

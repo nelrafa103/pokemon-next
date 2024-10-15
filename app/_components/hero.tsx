@@ -1,7 +1,7 @@
 "use server"
 import { Code } from "@nextui-org/react";
 
-function HeroComponent() {
+function HeroComponent(): React.ReactElement {
 	return (
 		<div className="bg-gray-100 lg:min-h-screen md:min-h-48 flex items-center justify-center my-5">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -4,7 +4,10 @@ import * as Ability from '@/app/_interfaces/ability'
 import * as Pokemon from '@/app/_interfaces/pokemon'
 import { getPokemonAbilities } from '@/app/_aux/pokemon_api'
 import ItemComponent from './item'
-export default function ListComponent(props: { abilities: Pokemon.Ability[] }) {
+interface ListProps {
+	abilities: Pokemon.Ability[]
+}
+export default function ListComponent(props: ListProps): React.ReactElement<ListProps> {
 
 	const [abilities, setAbilities] = React.useState<Ability.Root[]>([]);
 	React.useEffect(() => {

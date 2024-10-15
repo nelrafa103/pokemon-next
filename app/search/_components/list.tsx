@@ -1,9 +1,12 @@
 "use client";
 import { getPokemonList } from "@/app/_aux/pokemon_api";
 import * as Pokemon from "@/app/_interfaces/pokemon";
-import { ItemComponent } from "./item";
+import ItemComponent from "./item";
 import * as React from "react";
-export default function ListComponent(props: { items: Pokemon.Root[] }) {
+interface ListProps {
+  items: Pokemon.Root[] 
+}
+export default function ListComponent(props: ListProps): React.ReactElement<ListProps> {
  
   const [pokemons, setPokemons] = React.useState<Pokemon.Root[]>([]);
   const limit = React.useRef(30);

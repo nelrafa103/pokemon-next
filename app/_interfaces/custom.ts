@@ -8,3 +8,7 @@ export interface SignInAuth {
 	password: string,
 	email: string
 }
+
+export interface SearchParams {
+	input: string
+}

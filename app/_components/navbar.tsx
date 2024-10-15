@@ -1,22 +1,16 @@
-import { headers } from "next/headers";
+"use client"
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  NavigationMenuList, 
 } from "../../components/ui/navigation-menu";
-import { Button } from "../../components/ui/button";
 import AutoCompleteComponent from "./autocomplete";
-import { redirect } from "next/navigation";
 import ButtonComponent from "./navbar/button";
+import { useRouter } from "next/navigation";
  
-function NavComponent() {
-  const headerList = headers();
-  const fullUrl = headerList.get("referer") || "";
-
+export default function NavComponent(): React.ReactElement {
+  const router = useRouter();
   return (
     <NavigationMenu className="flex flex-row min-w-full pt-3">
       <div className="w-1/2">
@@ -29,7 +23,7 @@ function NavComponent() {
 
             </NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem onClick={() => router.push("/about")}>
             <NavigationMenuLink asChild>
               <a
                 className="flex h-full w-full select-none flex-col justify-end rounded-md from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
@@ -39,7 +33,7 @@ function NavComponent() {
               </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem  onClick={() => router.push("/search")}>
             <NavigationMenuLink asChild>
               <a
                 className="flex h-full w-full select-none flex-col justify-end rounded-md from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
@@ -65,4 +59,3 @@ function NavComponent() {
   );
 }
 
-export default NavComponent;

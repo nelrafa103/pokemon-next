@@ -1,8 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import React from "react"
 
-export default function About() {
+export default function About(): React.ReactElement {
   return (
     <div className="w-full flex min-h-screen justify-center items-center">
     <Card className="w-full max-w-2xl mx-auto">

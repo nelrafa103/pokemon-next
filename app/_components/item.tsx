@@ -9,16 +9,20 @@ import {
 import Image from "next/image";
 import { Root } from "../_interfaces/pokemon";
 import { useRouter } from "next/navigation";
+import { toUpperCase } from "../_aux/utils";
 
-function ItemComponent(props: { pokemon: Root }) {
+interface ItemProps {
+  pokemon: Root
+}
+
+
+function ItemComponent(props: ItemProps): React.ReactElement<ItemProps> {
   const router = useRouter();
 
   function handleClick(param: number) {
     router.push(`/pokemon/details/${param}`);
   }
 
-  const capitalized_name =
-    props.pokemon.name.charAt(0).toUpperCase() + props.pokemon.name.slice(1);
   return (
     <Card
       className="mb-4 w-10/12 mx-5 h-60 hover:bg-gray-300 hover:cursor-pointer"
@@ -32,7 +36,7 @@ function ItemComponent(props: { pokemon: Root }) {
             width={64}
             height={64}
           />
-          {capitalized_name}
+          {toUpperCase(props.pokemon.name)}
         </CardTitle>
         <CardContent>
           <ul>

@@ -5,87 +5,28 @@ import HeroComponent from "../_components/hero";
 import { getPokemonDetails } from "@/app/_aux/pokemon_api";
 import ListComponent from "../_components/list";
 
-const initial: Pokemon.Root = {
-  abilities: [],
-  base_experience: 0,
-  cries: {
-    latest: "",
-    legacy: "",
-  },
-  forms: [],
-  game_indices: [],
-  height: 0,
-  held_items: [],
-  id: 0,
-  is_default: false,
-  location_area_encounters: "",
-  moves: [],
-  name: "",
-  order: 0,
-  past_abilities: [],
-  past_types: [],
-  species: {
-    name: "",
-    url: "",
-  },
-  sprites: {
-    back_default: "",
-    back_female: undefined,
-    back_shiny: "",
-    back_shiny_female: undefined,
-    front_default: "",
-    front_female: undefined,
-    front_shiny: "",
-    front_shiny_female: undefined,
-    other: {
-      dream_world: {
-        front_default: "",
-        front_female: undefined,
-      },
-      home: {
-        front_default: "",
-        front_female: undefined,
-        front_shiny: "",
-        front_shiny_female: undefined,
-      },
-      "official-artwork": {
-        front_default: "",
-        front_shiny: "",
-      },
-      showdown: {
-        back_default: "",
-        back_female: undefined,
-        back_shiny: "",
-        back_shiny_female: undefined,
-        front_default: "",
-        front_female: undefined,
-        front_shiny: "",
-        front_shiny_female: undefined,
-      },
-    },
-  },
-  stats: [],
-  types: [],
-  weight: 0,
-};
-
-export default function Details({ params }: { params: { id: number } }) {
-  const [details, setDetails] = React.useState<Pokemon.Root>(initial);
+interface DetailsProps {
+  id: number
+}
+export default function Details(props: DetailsProps): React.ReactElement<DetailsProps> {
+  const [details, setDetails] = React.useState<Pokemon.Root>();
   React.useEffect(() => {
-    getPokemonDetails({ id: params.id, tries: 5 }).then((res) =>
+    getPokemonDetails({ id: props.id, tries: 5 }).then((res) =>
       setDetails(res),
     );
   }, []);
-
+  const spriteSrc = details?.sprites?.other["official-artwork"].front_default || '';
+  const name = details?.name || 'No available';
+  const abilities = details?.abilities || [];
   return (
     <>
       <HeroComponent
-        src={details.sprites.other["official-artwork"].front_default}
-        alt={details.name}
-        name={details.name}
+        src={spriteSrc}
+        alt={name}
+        name={name}
         key={"Detailed Heroe"}
       />
-      <ListComponent abilities={details.abilities} />
+      <ListComponent abilities={abilities} />
     </>
   );
 }

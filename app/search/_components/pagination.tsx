@@ -1,6 +1,8 @@
+"use client"
+import * as React from 'react'
 import { Pagination } from "@nextui-org/react";
 
-export default function PaginationComponent() {
+export default function PaginationComponent(): React.ReactElement {
   return (
     <div className="w-full flex justify-center items-center">
       {" "}

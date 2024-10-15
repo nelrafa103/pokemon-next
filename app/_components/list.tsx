@@ -5,8 +5,8 @@ import ListItemComponent from "./item";
 
 import { getPokemonList } from "../_aux/pokemon_api";
 import { setTimeout } from "timers";
-export default function ListComponent() {
-  const documentRef = React.useRef(document);
+export default function ListComponent(): React.ReactElement {
+
   const [counter, setCounter] = React.useState(0);
   const limit = 10;
   const offset = React.useRef(0);
@@ -20,7 +20,9 @@ export default function ListComponent() {
       setCounter(counter + 1);
     }
   }
-  documentRef.current.addEventListener("scroll", handleScroll);
+  if (typeof document != "undefined") {
+    document.addEventListener("scroll", handleScroll);
+  }
   const [pokemons, setPokemons] = React.useState<Pokemon.Root[]>([]);
 
   React.useEffect(() => {

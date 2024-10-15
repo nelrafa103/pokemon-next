@@ -1,6 +1,8 @@
 import * as Pokemon from "../_interfaces/pokemon";
 import * as Ability from "../_interfaces/ability";
 import * as CustomPokemon from "../_interfaces/custom"
+import { Response } from "../pokemon/route";
+import { SearchParams } from "../_interfaces/custom";
 async function requestPokemonList(limit: number, offset: number) {
 
 
@@ -10,9 +12,9 @@ async function requestPokemonList(limit: number, offset: number) {
 	const response = await request.json();
 
 	const promises = response.results.map((pokemon: { url: string }) => requestPokemonData(pokemon.url));
-	const pokemon_list: Pokemon.Root[] = await Promise.all(promises);
+	const pokemons: Pokemon.Root[] = await Promise.all(promises);
 
-	return pokemon_list;
+	return pokemons;
 }
 
 async function requestPokemonData(url: string) {
@@ -138,5 +140,49 @@ function requestCache(pokemons: Pokemon.Root[]) {
 		body: JSON.stringify(pokemons)
 	})
 
+	
+}
+
+/* Request Search */
+export async function requestSearch(searchInput: string): Promise<Pokemon.Root[]> {
+	const coincides = []
+	const body: SearchParams = {
+		input: searchInput
+	}
+	try {
+		const req = await fetch("/pokemon", {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+
+			},
+			body: JSON.stringify(body)
+		})
+	 
+		const res: Response = await req.json()
+
+
+		for (const item of res.resolved) {
+			for (const where of res.tasks) {
+				if (item.name == where.name) {
+					coincides.push(where)
+				}
+			}
+		}
+
+		coincides.forEach((item) => {
+			res.tasks = res.tasks.filter(elem => elem !== item)
+		})
+
+
+		const list = res.tasks.length != 0 ? await requestSearched(res.tasks) : []
+   
+		const unified_list = list.concat(res.resolved)
+		return unified_list;
+	} catch (error) {
+		return new Promise(() => [])
+	} finally {
+		/* Makes some noise */
+	}
 	
 }

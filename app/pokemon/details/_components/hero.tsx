@@ -1,9 +1,15 @@
 "use client"
 import { toUpperCase } from "@/app/_aux/utils";
 import { Image } from "@nextui-org/react";
+import * as React from "react"; 
 
-export default function HeroComponent(props: { alt: string, src: string, name: string }) {
-	const capitalize_name = props.name.length > 0 ?  toUpperCase(props.name) : ""
+interface HeroProps {
+	alt: string,
+	name: string,
+	src: string
+}
+
+const HeroCompoent = React.memo((props: HeroProps): React.ReactElement<HeroProps> => {
 
 	return (<div className="flex items-center flex-col place-items-center content-center w-full justify-items-center justify-center">
 		<Image
@@ -16,7 +22,7 @@ export default function HeroComponent(props: { alt: string, src: string, name: s
 		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div className="text-center my-5">
 				<h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-					<span className="block">{capitalize_name}</span>
+					<span className="block">{toUpperCase(props.name)}</span>
 				</h1>
 				<p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
 					Discover amazing features and services that will revolutionize your experience.
@@ -43,5 +49,6 @@ export default function HeroComponent(props: { alt: string, src: string, name: s
 		</div>
 	</div>)
 		
-}
+})
 
+export default HeroCompoent

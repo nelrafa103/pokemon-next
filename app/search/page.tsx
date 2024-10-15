@@ -4,42 +4,17 @@ import { Input } from "@/components/ui/input";
 import ListComponent from "./_components/list";
 import PaginationComponent from "./_components/pagination";
 import * as React from 'react'
-import { requestSearched } from "../_aux/pokemon_api";
+import { requestSearch } from "../_aux/pokemon_api";
 import { Root } from "../_interfaces/pokemon";
 import { Badge } from "@/components/ui/badge"
-import { Response } from "../pokemon/route";
 
-export default function Search() {
+export default function Search(): React.ReactElement {
 
   const [value, setValue] = React.useState<string>("")
   const [pokemons, setPokemons] = React.useState<Root[]>([])
   async function handleChange() {
-    const req = await fetch("/pokemon", {
-      method: "POST",
-      body: JSON.stringify(
-        {
-          param: value
-        }
-      )
-    })
-    const res: Response = await req.json()
-    const coincides = []
-    for (const item of res.resolved) {
-      for (const where of res.tasks) {
-        if (item.name == where.name) {
-          coincides.push(where)
-        }
-      }
-    }
-
-    coincides.forEach((item) => {
-     res.tasks = res.tasks.filter(elem => elem !== item)
-    })
-
-    const list = res.tasks.length != 0  ? await requestSearched(res.tasks): []
-   
-    const unified_list = list.concat(res.resolved)
-    setPokemons(unified_list)
+    const results = await requestSearch(value)
+    setPokemons(results)
   }
 
   React.useEffect(() => {

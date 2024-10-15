@@ -10,11 +10,8 @@ export class Mongo {
 	private static async connect(db: string) {
 		
 		try {
-			
 			return Mongo.client.db(db)
-		}
-		
-		catch (e) {
+		} catch (e) {
 			throw e
 		} finally {
 			console.log("Send some data to server")

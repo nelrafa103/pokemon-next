@@ -2,11 +2,14 @@
 "use client"
 import { NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button";
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-
-export default function ButtonComponent(props: { value: string }) {
+interface ButtonProps {
+	value: string
+}
+export default function ButtonComponent(props: ButtonProps): React.ReactElement<ButtonProps> {
 	const router = useRouter()
-    const pathname = usePathname()
+	const pathname = usePathname()
 
 	const isInSignIn = pathname.includes("signin") ? true : false
 	return (

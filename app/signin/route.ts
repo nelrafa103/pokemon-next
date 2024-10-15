@@ -1,6 +1,7 @@
 import Users from "../_services/users"
 import { SignInAuth } from "../_interfaces/custom"
-export async function POST(request: Request) {
+import { NextResponse } from "next/server"
+export async function POST(request: Request): Promise<NextResponse> {
 	const formData = await request.formData() 
 
 	const email: any = formData.get("email")!
@@ -11,13 +12,13 @@ export async function POST(request: Request) {
 
 		try {
 			const auth = await Users.authenticate(form)
-			return new Response(JSON.stringify(auth), {
+			return new NextResponse(JSON.stringify(auth), {
 				status: 200,
 				headers: { 'Content-Type': 'application/json' },
 			});
           
 		} catch (e) {
-			return new Response(JSON.stringify({ error: 'Authentication failed', details: e }), {
+			return new NextResponse(JSON.stringify({ error: 'Authentication failed', details: e }), {
 				status: 401,
 				headers: { 'Content-Type': 'application/json' },
 			});
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
 			/* Send me some logs to my app*/
 		}
 	} else {
-		return new Response(JSON.stringify({ error: "Insuficient data" }), {
+		return new NextResponse(JSON.stringify({ error: "Insuficient data" }), {
 			status: 400,
 			headers: { 'Content-Type': 'application/json' },
 		})

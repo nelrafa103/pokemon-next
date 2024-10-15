@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 import { NextUIProvider } from "@nextui-org/react";
 import React from "react";
-//import {ThemeContext ,light } from "./_context/theme";
 import NavComponent from "./_components/navbar";
 export default function RootLayout({
   children,

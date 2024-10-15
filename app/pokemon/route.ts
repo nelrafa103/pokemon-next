@@ -3,33 +3,46 @@
 import { Mongo } from "../_services/mongo"
 import { Redis } from "../_services/redis"
 import * as Pokemon from '../_interfaces/pokemon'
-import { PokemonSearch } from "../_interfaces/custom"
-interface SearchParam {
-	param: string
-}
+import { PokemonSearch, SearchParams } from "../_interfaces/custom"
+import { NextResponse } from "next/server"
 
 
-export async function POST(request: Request) { 
-	const req: SearchParam = await request.json()
+export async function POST(request: Request): Promise<NextResponse> { 
 
-	const collection = await Mongo.pokemonsCollection()
-	const results = await collection.find({
-		name: { $regex: req.param, $options: 'i' }
-	}).toArray()
+	try {
+		const req: SearchParams = await request.json()
+
+		const collection = await Mongo.pokemonsCollection()
+		const results = await collection.find({
+			name: { $regex: req.input, $options: 'i' }
+		}).toArray()
 	
-	let loaded: any[] = [] 
-	for (let item of results) {
-		const res = await Redis.get({ key: item.name })
-		const parsed = JSON.parse(res)
-		if (typeof parsed != "string" && parsed != null) {
-			loaded.push(parsed)
-		}
+
+		const promises = results.map(item => Redis.get({key: item.name}))
+        const loaded = (await Promise.all(promises)).filter((item) => typeof item != "string" && item != null)
+
+		return new NextResponse(JSON.stringify({
+			task: results,
+			resolved: loaded
+		}), {
+			status: 200,
+			headers: {
+				"Content-Type": "json/application"
+			}
+		})
+	} catch (error) {
+		return new NextResponse(JSON.stringify({
+			message: "Failed"
+		}), {
+			status: 404,
+			headers: {
+				"Content-Type": "json/application"
+			}
+		})
 	}
 
-	return Response.json({ 
-		tasks: results,
-		resolved: loaded
-	})
+
+
 
 }
 
