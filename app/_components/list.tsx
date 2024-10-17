@@ -1,17 +1,43 @@
 "use client";
-import * as React from "react";
+import React from "react";
 import * as Pokemon from "../_interfaces/pokemon";
-import ListItemComponent from "./item";
 
 import { getPokemonList } from "../_aux/pokemon_api";
 import { setTimeout } from "timers";
-export default function ListComponent(): React.ReactElement {
 
+import { Card } from "@/components/ui/card";
+
+const PokemonItem = React.memo(({ pokemon }: { pokemon: Pokemon.Root }) => {
+  const ListItemComponent = React.lazy(() => import("./item"));
+
+  return (
+    <React.Suspense fallback={<LoadinItem />}>
+      <ListItemComponent key={pokemon.id} pokemon={pokemon} />
+    </React.Suspense>
+  );
+});
+
+PokemonItem.displayName = "PokemonItem";
+
+function LoadinItem() {
+  return (
+    <Card className="mb-4 w-10/12 mx-5 h-60 hover:bg-gray-300 hover:cursor-pointer">
+      <div className="flex flex-col items-center justify-center w-full dark:bg-gray-900">
+        <div className="p-8 bg-white dark:bg-gray-800 text-center">
+          <div className="spinner mx-auto mb-4"> </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+export default function ListComponent(): React.ReactElement {
   const [counter, setCounter] = React.useState(0);
   const limit = 10;
   const offset = React.useRef(0);
 
-  function handleScroll() {
+  function handleScroll(event: Event) {
+    event.preventDefault();
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
@@ -41,10 +67,9 @@ export default function ListComponent(): React.ReactElement {
 
   return (
     <div className="grid lg:grid-cols-5 md:grid-cols-3 items-center justify-items-center">
-      {
-        pokemons.map((item, index) => <ListItemComponent pokemon={item} key={index} />)
-      }
+      {pokemons.map((item, index) => (
+        <PokemonItem pokemon={item} key={index} />
+      ))}
     </div>
   );
 }
-

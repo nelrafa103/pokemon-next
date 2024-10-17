@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import React from "react";
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -27,6 +28,7 @@ const FormSchema = z.object({
 });
 
 export default function SignIn() {
+ 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -63,9 +65,7 @@ export default function SignIn() {
                   <FormControl>
                     <Input placeholder="Introduce your username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Introduce your Email
-                  </FormDescription>
+                  <FormDescription>Introduce your Email</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -80,9 +80,7 @@ export default function SignIn() {
                   <FormControl>
                     <Input placeholder="Introduce your password" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Introduce your Password
-                  </FormDescription>
+                  <FormDescription>Introduce your Password</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -96,7 +94,6 @@ export default function SignIn() {
           </form>
         </Form>
       </div>
-    
     </div>
   );
 }

@@ -1,25 +1,21 @@
-import * as React from "react";
+import React from "react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { Root } from "../_interfaces/pokemon";
 import { useRouter } from "next/navigation";
 import { toUpperCase } from "../_aux/utils";
 
 interface ItemProps {
-  pokemon: Root
+  pokemon: Root;
 }
-
 
 function ItemComponent(props: ItemProps): React.ReactElement<ItemProps> {
   const router = useRouter();
 
   function handleClick(param: number) {
+    // console.log(param)
+
     router.push(`/pokemon/details/${param}`);
   }
 

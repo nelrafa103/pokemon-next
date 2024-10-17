@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  pokemon-next:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    restart: always
+    ports: 
+     - 3000:3000
+    env_file:
+      - .env
+    volumes:
+      - pokemon-next:/tmp/ 
+    networks:
+      - red-app
+   
+  mongo: 
+   image: mongo:latest
+   restart: always
+   ports:
+    - 27017:27017
+   volumes:
+      - pokemon-next:/tmp/ 
+   networks:
+      - red-app
+
+  redis: 
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - red-app
+    volumes:
+      - pokemon-next:/tmp/ 
+
+networks:
+ red-app: 
+
+volumes:
+  pokemon-next: 

@@ -1,25 +1,41 @@
 "use client";
-import * as React from "react";
+import React from "react";
 import * as Pokemon from "@/app/_interfaces/pokemon";
-import HeroComponent from "../_components/hero";
 import { getPokemonDetails } from "@/app/_aux/pokemon_api";
-import ListComponent from "../_components/list";
+import LoadingPage from "./loading";
+import NotFound from "./not-found";
+
+const HeroComponent = React.lazy(() => import("../_components/hero"));
+const ListComponent = React.lazy(() => import("../_components/list"));
 
 interface DetailsProps {
-  id: number
+  id: number;
 }
-export default function Details(props: DetailsProps): React.ReactElement<DetailsProps> {
+export default function Details({
+  params,
+}: {
+  params: DetailsProps;
+}): React.ReactElement<DetailsProps> {
+  console.log(params);
   const [details, setDetails] = React.useState<Pokemon.Root>();
   React.useEffect(() => {
-    getPokemonDetails({ id: props.id, tries: 5 }).then((res) =>
+    getPokemonDetails({ id: params.id, tries: 5 }).then((res) =>
       setDetails(res),
     );
   }, []);
-  const spriteSrc = details?.sprites?.other["official-artwork"].front_default || '';
-  const name = details?.name || 'No available';
+
+  const spriteSrc =
+    details?.sprites?.other["official-artwork"].front_default || "";
+  const name = details?.name || "No available";
   const abilities = details?.abilities || [];
+  if (!isNaN(params.id) === false) {
+    return <NotFound key={"Not found"} />;
+  }
+  if (name === "No available") {
+    return <LoadingPage />;
+  }
   return (
-    <>
+    <React.Suspense fallback={<LoadingPage />}>
       <HeroComponent
         src={spriteSrc}
         alt={name}
@@ -27,6 +43,6 @@ export default function Details(props: DetailsProps): React.ReactElement<Details
         key={"Detailed Heroe"}
       />
       <ListComponent abilities={abilities} />
-    </>
+    </React.Suspense>
   );
 }
