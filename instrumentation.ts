@@ -57,7 +57,7 @@ export async function register() {
              
             });
 
-            pokemons.insertOne({pokemon: newObject[index]})
+            pokemons.insertOne(newObject[index])
             index += 1;
 
             if ((index % 10) - 1 != 0) {
