@@ -119,7 +119,7 @@ Abitilies request section ends
 
 export async function RequestAllPokemons(): Promise<CustomPokemon.Root> {
   const request = await fetch(
-    process.env.NEXT_PUBLIC_POKEMON_URL_BASE + `pokemon?limit=20&offset=0`,
+    process.env.NEXT_PUBLIC_POKEMON_URL_BASE + `pokemon?limit=1000&offset=0`,
   );
   const response = await request.json();
   return response;

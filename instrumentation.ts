@@ -51,11 +51,13 @@ export async function register() {
               return Apollo.default.getPokemonTypes(Number(id));
             });
             const res = await Promise.all(promises);
-            res.map((item) => {
+            res.map(async (item) => {
               newObject[index].type =
                 item.pokemon_v2_pokemontype[0].pokemon_v2_type.name;
+             
             });
 
+            pokemons.insertOne({pokemon: newObject[index]})
             index += 1;
 
             if ((index % 10) - 1 != 0) {
@@ -64,7 +66,7 @@ export async function register() {
               await new Promise((resolve) => setTimeout(resolve, 10000));
             }
           }
-          pokemons.insertMany(newObject);
+      
         }
 
         if (users_amount == 0) {
