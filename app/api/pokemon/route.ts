@@ -1,9 +1,9 @@
 "use server";
 
-import { Mongo } from "../_services/mongo";
-import { Redis } from "../_services/redis";
-import * as Pokemon from "../_interfaces/pokemon";
-import { PokemonSearch, SearchParams } from "../_interfaces/custom";
+import { Mongo } from "../../_services/mongo";
+import { Redis } from "../../_services/redis";
+import * as Pokemon from "../../_interfaces/pokemon";
+import { PokemonSearch, SearchParams } from "../../_interfaces/custom";
 import { NextRequest, NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 export async function POST(request: Request): Promise<NextResponse> {
@@ -97,3 +97,22 @@ export interface Response {
   tasks: PokemonSearch[];
   resolved: Pokemon.Root[];
 }
+
+
+/* 
+
+import { Mongo } from "../_services/mongo";
+export async function recomendations(req: { param: string }) {
+  const collection = await Mongo.pokemonsCollection();
+  const pokemons = collection
+    .find({
+      name: { $regex: req.param, $options: "i" },
+	  type: { $regex: req.param, $options: "i"}
+    })
+    .toArray();
+
+  return pokemons;
+}
+
+
+*/

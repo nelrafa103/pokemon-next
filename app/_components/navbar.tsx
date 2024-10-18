@@ -16,7 +16,7 @@ export default function NavComponent(): React.ReactElement {
       <div className="w-1/2">
         <NavigationMenuList className="flex-1">
           <NavigationMenuItem>
-            <NavigationMenuLink>
+            <NavigationMenuLink href="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -43,11 +43,11 @@ export default function NavComponent(): React.ReactElement {
               </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem onClick={() => router.push("/search")}>
+          <NavigationMenuItem onClick={() => router.push("/search/bulbasaur")}>
             <NavigationMenuLink asChild>
               <a
                 className="flex h-full w-full select-none flex-col justify-end rounded-md from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                href="/search"
+                href="/search/bulbasaur"
               >
                 Busqueda de Pokemones
               </a>

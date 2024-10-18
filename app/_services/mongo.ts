@@ -45,11 +45,33 @@ export class Mongo {
   static async authenticationCollection() {
     try {
       const client = await Mongo.connect("logs");
-     
       return client.collection("authentication");
     } catch (error) {
       Sentry.captureException(error);
       throw new Error("Could not connect to the database.");
     }
   }
+
+
+
+  static async tokenCollection() {
+    try {
+      const client = await Mongo.connect("logs");
+      return client.collection("tokens");
+    } catch (error) {
+      Sentry.captureException(error);
+      throw new Error("Could not connect to the database.");
+    }
+  }
+
+  static async userCollection() {
+    try {
+      const client = await Mongo.connect("pokemon-next");
+      return client.collection("collections");
+    } catch (error) {
+      Sentry.captureException(error);
+      throw new Error("Could not connect to the database.");
+    }
+  }
+
 }

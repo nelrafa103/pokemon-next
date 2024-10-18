@@ -1,9 +1,10 @@
 import * as Pokemon from "../_interfaces/pokemon";
 import * as Ability from "../_interfaces/ability";
 import * as CustomPokemon from "../_interfaces/custom";
-import { Response } from "../pokemon/route";
+import { Response } from "../api/pokemon/route";
 import { SearchParams } from "../_interfaces/custom";
 import * as Sentry from "@sentry/nextjs";
+
 async function requestPokemonList(limit: number, offset: number) {
   const request = await fetch(
     process.env.NEXT_PUBLIC_POKEMON_URL_BASE +
@@ -80,7 +81,6 @@ Abilties request section ahead
 --------------------------
 */
 
-
 async function requestPokemonAbities(abilities: Pokemon.Ability[]) {
   const promises = abilities.map((item) =>
     requestPokemonData(item.ability.url),
@@ -105,8 +105,7 @@ export async function getPokemonAbilities(props: {
         tries: props.tries - 1,
       });
     } else {
-		
-	  Sentry.captureException(error)
+      Sentry.captureException(error);
       throw error;
     }
   }
@@ -136,7 +135,7 @@ export async function requestSearched(pokemons: CustomPokemon.PokemonSearch[]) {
 }
 
 function requestCache(pokemons: Pokemon.Root[]) {
-  fetch("/pokemon", {
+  fetch("/api/pokemon", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -154,7 +153,7 @@ export async function requestSearch(
     input: searchInput,
   };
   try {
-    const req = await fetch("/pokemon", {
+    const req = await fetch("/api/pokemon", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -181,7 +180,36 @@ export async function requestSearch(
     const unified_list = list.concat(res.resolved);
     return unified_list;
   } catch (error) {
-	Sentry.captureException(error)
+    Sentry.captureException(error);
     return new Promise(() => []);
   }
+}
+
+export async function authentication(
+  email: string,
+  password: string,
+): Promise<unknown> {
+  const formData = new FormData();
+  console.log(email, password);
+
+  formData.set("email", email);
+  formData.set("password", password);
+  const req = await fetch("/api/signin", {
+    body: formData,
+    method: "POST",
+  });
+  const res = await req.json();
+  return res;
+}
+
+export async function getPokemonsbyUserEmail(email: string) {
+  const req = await fetch("/api/collection", {
+    method: "GET",
+    headers: {
+      Email: email,
+    },
+  });
+  const res = await req.json();
+  console.log(res)
+  return res;
 }

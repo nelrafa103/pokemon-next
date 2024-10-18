@@ -4,14 +4,15 @@ For faster searching on databases*/
 
 /* Mover este codigo a pokemon service, agregar aqui codigo para trc*/
 
-import { Mongo } from "../_services/mongo";
-export async function recomendations(req: { param: string }) {
-  const collection = await Mongo.pokemonsCollection();
-  const pokemons = collection
-    .find({
-      name: { $regex: req.param, $options: "i" },
-    })
-    .toArray();
+export async function recomendations(input: string) {
+  const req = await fetch("/api/search", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ input }),
+  });
+  const res = await req.json()
 
-  return pokemons;
+  return res;
 }

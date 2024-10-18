@@ -17,18 +17,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import React from "react";
-
-const FormSchema = z.object({
-  email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
+import { authentication } from "@/app/_aux/pokemon_api";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
- 
+  const FormSchema = z.object({
+    email: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
+    password: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -36,8 +38,22 @@ export default function SignIn() {
       password: "",
     },
   });
+  const [cookies, setCookie] = useCookies(["jwt", "email"]);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  const router = useRouter();
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data.email, data.password);
+    const res = await authentication(data.email, data.password);
+    if (res != null && res != undefined) {
+      router.push("/");
+    }
+    setCookie("jwt", res.token, {
+      path: "/"
+    });
+    setCookie("email", res.email, {
+      path: "/"
+    });
     toast({
       title: "You submitted the following values:",
       description: (

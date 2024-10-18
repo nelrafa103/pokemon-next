@@ -1,17 +1,20 @@
-import Users from "../_services/users";
-import { SignInAuth } from "../_interfaces/custom";
+import Users from "../../_services/users";
+import { SignInAuth } from "../../_interfaces/custom";
 import { NextResponse } from "next/server";
 import { captureMessage } from "@sentry/react";
 import jwt from "jsonwebtoken";
 //import { isEmailValid, validatePassword } from "../_aux/utils";
 //import { validateEmailDomain } from "../_aux/server_utils";
-import { Mongo } from "../_services/mongo";
+import { Mongo } from "../../_services/mongo";
 
 export async function POST(request: Request): Promise<NextResponse> {
+  console.log(request.headers)
+
   const formData = await request.formData();
 
   const email: FormDataEntryValue = formData.get("email")!;
   const password: FormDataEntryValue = formData.get("password")!;
+  console.log(email,password)
   if (email && password) {
     const form: SignInAuth = {
       email: String(email),
@@ -37,8 +40,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       );
     } */
     try { 
-      const auth = await Users.authenticate(form);
+     const auth = await Users.authenticate(form);
       if (auth != null) {
+         
         const token = jwt.sign({ email }, process.env.JWT_SECRET || "", {
           expiresIn: "3h",
         });
@@ -49,12 +53,13 @@ export async function POST(request: Request): Promise<NextResponse> {
           email: form.email,
           result: 'resolved'
          })
+          
         /*Hacer algo aqui para comprobar de que todo esta bien*/
-        return new NextResponse(JSON.stringify(token), {
+        return new NextResponse(JSON.stringify({token: token, email}), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         });
-
+ 
       } else {
         return new NextResponse(
           JSON.stringify({ message: "The user of the password are incorrect" }),

@@ -77,7 +77,7 @@ export default function ListComponent(
   if (pokemons.length == 0) {
     const inital = [];
     for (let index = 0; index < limit.current; index++) {
-      inital.push(<LoadingItem/>);
+      inital.push(<LoadingItem key={index}/>);
     }
     return (
       <div className="grid lg:grid-cols-5 md:grid-cols-3 items-center justify-items-center">
